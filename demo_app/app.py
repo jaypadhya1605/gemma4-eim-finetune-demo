@@ -407,8 +407,8 @@ st.markdown(
 summary = load_eval_summary()
 if summary:
     metric_cols = st.columns(3)
-    metric_cols[0].metric("Base Gemma winner eval", f"{summary['base']}/{summary['max']}")
-    metric_cols[1].metric("Fine-tuned winner eval", f"{summary['tuned']}/{summary['max']}")
+    metric_cols[0].metric("Base Gemma", f"{summary['base']}/{summary['max']}")
+    metric_cols[1].metric("Fine-tuned", f"{summary['tuned']}/{summary['max']}")
     metric_cols[2].metric("Fine-tuned lift", f"+{summary['delta']}")
 
 st.markdown(
