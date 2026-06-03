@@ -167,6 +167,11 @@ function Add-Notes {
     }
 }
 
+function New-TalkTrack {
+    param([string[]]$Lines)
+    return ($Lines -join [Environment]::NewLine)
+}
+
 function New-Slide {
     param($Presentation, [int]$Index, [string]$Background = "F7F9FC")
     $slide = $Presentation.Slides.Add($Index, $ppLayoutBlank)
@@ -560,6 +565,37 @@ function Add-Slide11 {
     return $slide
 }
 
+function Add-Slide11FineTuneCode {
+    param($Presentation, [int]$Index)
+    $slide = New-Slide $Presentation $Index
+    Add-Title $slide "Fine-tuning in code: what actually changes"
+    Add-Text $slide "The base Gemma weights stay mostly frozen. The training job learns a small LoRA adapter that changes how the model responds to this browser-action contract." 0.65 1.24 9.6 0.42 13.2 $Theme.Muted -Font "Aptos" | Out-Null
+
+    $steps = @(
+        @{N=1; T="Load base Gemma"; B="Transformers loads the catalog model in bf16 on the A100."; C=$Theme.Blue; Code="from_pretrained(...)"},
+        @{N=2; T="Inject LoRA"; B="PEFT adds trainable adapter matrices to attention and MLP projections."; C=$Theme.Purple; Code="LoraConfig(r=32, alpha=64)"},
+        @{N=3; T="Run SFT"; B="TRL SFTTrainer learns from messages: system, user DOM, assistant JSON."; C=$Theme.Green; Code="trainer = SFTTrainer(...)"},
+        @{N=4; T="Save adapter"; B="Only the adapter and metadata are saved, then registered and deployed."; C=$Theme.Orange; Code="save_pretrained(adapter)"}
+    )
+    for ($i = 0; $i -lt $steps.Count; $i++) {
+        $x = 0.78 + ($i * 3.05)
+        Add-Box $slide $x 2.05 2.72 3.9 $Theme.Panel $Theme.Border -Rounded | Out-Null
+        Add-Circle $slide ($x + 0.18) 2.28 0.48 $steps[$i].C | Out-Null
+        Add-Text $slide ([string]$steps[$i].N) ($x + 0.195) 2.36 0.45 0.12 10 $Theme.White -Bold -Align "Center" -Font "Segoe UI" | Out-Null
+        Add-Text $slide $steps[$i].T ($x + 0.78) 2.28 1.68 0.25 12.5 $Theme.Ink -Bold -Font "Segoe UI" | Out-Null
+        Add-Text $slide $steps[$i].B ($x + 0.24) 2.9 2.2 0.72 10.2 $Theme.Muted -Font "Segoe UI" | Out-Null
+        Add-Box $slide ($x + 0.24) 4.05 2.18 0.62 "11100F" "none" -Rounded | Out-Null
+        Add-Text $slide $steps[$i].Code ($x + 0.35) 4.28 1.98 0.12 7.7 $Theme.BlueLight -Font "Consolas" | Out-Null
+        if ($i -lt 3) { Add-Line $slide ($x + 2.74) 4.0 ($x + 3.0) 4.0 $steps[$i].C 2.5 | Out-Null }
+    }
+
+    Add-Box $slide 1.05 6.35 11.15 0.48 $Theme.BlueLight "none" -Rounded | Out-Null
+    Add-Text $slide "Plain English: we do not overwrite Gemma. We attach a small learned adapter that nudges it toward stable selectors, strict JSON, and correct workflow order." 1.28 6.5 10.7 0.12 9.2 $Theme.BlueDark -Bold -Align "Center" -Font "Segoe UI" | Out-Null
+    Add-Footer $slide $Index
+    Add-Notes $slide "This slide is the code-level fine-tuning explanation. I will replace these notes with the consolidated line-by-line talk track before saving the deck."
+    return $slide
+}
+
 function Add-Slide12 {
     param($Presentation, [int]$Index)
     $slide = New-Slide $Presentation $Index $Theme.Graphite
@@ -600,8 +636,116 @@ $builders = @(
     ${function:Add-Slide8},
     ${function:Add-Slide9},
     ${function:Add-Slide10},
+    ${function:Add-Slide11FineTuneCode},
     ${function:Add-Slide11},
     ${function:Add-Slide12}
+)
+
+$TalkTracks = @(
+    (New-TalkTrack @(
+        "Slide 1. I will start with the headline: this is a Gemma 4B-class fine-tuning demo for a browser-action agent.",
+        "The business question is whether a small open model can learn a reliable EIM workflow behavior.",
+        "The demo uses AzureML managed compute, synthetic data only, and a LoRA adapter.",
+        "The output we care about is not prose. It is a JSON action plan that another system can execute.",
+        "I will walk through the baseline, the fine-tuning method, the data, the Azure resources, and the before-after result."
+    ))
+    (New-TalkTrack @(
+        "Slide 2. The problem is that browsing agents need repeatable actions, not just good-sounding answers.",
+        "The user gives a goal, such as opening a prior authorization and submitting it after a policy check.",
+        "The model sees a compact page state, usually a DOM snippet with both generated IDs and stable attributes.",
+        "The model must return the action contract: click, type, or extract in strict JSON.",
+        "This matters because Molina needs repeatable, auditable, low-variance workflow behavior."
+    ))
+    (New-TalkTrack @(
+        "Slide 3. This demo is scoped narrowly on purpose.",
+        "We test a workflow contract: DOM plus instruction in, JSON action plan out.",
+        "We use base Gemma as the small-model baseline to see what it can do before training.",
+        "We use synthetic healthcare-shaped data so no Molina PHI is involved.",
+        "We score objective checks: valid JSON, schema, stable selectors, workflow navigation, required actions, and order.",
+        "The Azure path is AzureML because this Gemma fine-tuning route is not using Foundry serverless fine-tuning."
+    ))
+    (New-TalkTrack @(
+        "Slide 4. Base Gemma is not bad, but it misses the contract we need.",
+        "It can often produce valid JSON and understand that the task involves clicking, typing, and extracting.",
+        "Where it fails is the workflow discipline.",
+        "It may choose generated IDs like member-search-3430 instead of stable data-eim selectors.",
+        "It may skip opening the correct workspace or miss the exact order.",
+        "That is why prompting alone is not the full answer for this demo."
+    ))
+    (New-TalkTrack @(
+        "Slide 5. The small SLM succeeds natively on general understanding.",
+        "It can parse healthcare-ish instructions and compact HTML or DOM snippets.",
+        "It usually understands click, type, and extract as action types.",
+        "But native behavior is still inconsistent for automation.",
+        "For a browser agent, a near miss still fails if the selector is brittle or the response includes extra prose.",
+        "So the measured gap is behavior consistency, not raw model knowledge."
+    ))
+    (New-TalkTrack @(
+        "Slide 6. Fine-tuning is the right lever because the gap is behavioral.",
+        "We are not teaching Molina medical policy to the model.",
+        "We are teaching the model how to respond when it sees a page state and a user instruction.",
+        "LoRA keeps the base Gemma model frozen and trains a small adapter on top.",
+        "That adapter learns stable selectors, workflow ordering, and JSON-only discipline.",
+        "This keeps the experiment cheaper and makes the behavior swappable by workflow later."
+    ))
+    (New-TalkTrack @(
+        "Slide 7. Here is the end-to-end process flow.",
+        "First, we generate deterministic synthetic JSONL examples.",
+        "Second, we prepare or package the data for AzureML.",
+        "Third, the AzureML SDK submits a command job to the A100 cluster.",
+        "Fourth, training.py loads Gemma, applies LoRA, and runs supervised fine-tuning.",
+        "Fifth, the adapter is registered and deployed.",
+        "Finally, the Streamlit app compares base and tuned behavior on the same prompts."
+    ))
+    (New-TalkTrack @(
+        "Slide 8. This is the data used for training.",
+        "The current winner profile uses 96 training records, 24 validation records, and 16 holdout eval prompts.",
+        "Each record is a messages object: system instruction, user DOM plus instruction, and assistant JSON answer.",
+        "The values are fake: fake member IDs, fake authorization IDs, and fake claims.",
+        "The reason for synthetic data is safety and control.",
+        "We are proving the workflow pattern without exposing Molina production data."
+    ))
+    (New-TalkTrack @(
+        "Slide 9. These are the technical resources behind the demo.",
+        "Foundry and AzureML catalog assets provide the Gemma base model reference.",
+        "AzureML provides the workspace, jobs, data assets, model registry, lineage, and managed online endpoint.",
+        "A100 compute runs the actual training job.",
+        "Key Vault is the production pattern for gated model tokens and secrets.",
+        "The SDK scripts are control-plane wrappers: prepare data, submit training, register the adapter, and deploy the endpoint."
+    ))
+    (New-TalkTrack @(
+        "Slide 10. This is what trains on the A100.",
+        "The laptop does not fine-tune the model. It only submits and monitors the AzureML job.",
+        "Inside the job, Transformers loads the Gemma base model in bf16.",
+        "PEFT applies LoRA with rank 32 and alpha 64 in the current winner profile.",
+        "The target modules are attention projections and MLP projections: q, k, v, o, gate, up, and down.",
+        "TRL SFTTrainer applies the chat template and trains on the assistant JSON examples.",
+        "The output is a LoRA adapter plus metadata, not a full model retrain."
+    ))
+    (New-TalkTrack @(
+        "Slide 11. This is the fine-tuning code path in plain English.",
+        "Step one, Transformers loads the base Gemma model from the catalog mount or model path.",
+        "Step two, PEFT injects LoRA trainable matrices into selected layers while the base weights stay frozen.",
+        "Step three, SFTTrainer trains against the message records: system, user DOM, and assistant JSON.",
+        "Step four, the job saves the adapter to outputs/lora_adapter.",
+        "The key point is that fine-tuning changes the response behavior through the adapter, not by rewriting the whole base model."
+    ))
+    (New-TalkTrack @(
+        "Slide 12. The live serving pattern uses one endpoint and two behaviors.",
+        "The endpoint loads the base model and the LoRA adapter.",
+        "When use_adapter is false, we see base Gemma behavior.",
+        "When use_adapter is true, we see the fine-tuned behavior.",
+        "That gives a clean side-by-side comparison without paying for two GPU endpoints.",
+        "After the demo, delete the endpoint to stop A100 hourly billing."
+    ))
+    (New-TalkTrack @(
+        "Slide 13. The conclusion is that the fine-tuned model solves the narrow contract better.",
+        "It learns to use stable data-eim selectors instead of generated IDs.",
+        "It learns workflow order, such as opening the workspace before acting inside it.",
+        "It keeps the response machine-readable by returning JSON only.",
+        "It remains governed through synthetic data, AzureML lineage, model registration, and endpoint cleanup.",
+        "The recommended next step is one real Molina workflow, safe examples, agreed graders, and the same baseline to fine-tune to eval loop."
+    ))
 )
 
 $powerPoint = $null
@@ -616,6 +760,10 @@ try {
 
     for ($i = 0; $i -lt $builders.Count; $i++) {
         & $builders[$i] $presentation ($i + 1) | Out-Null
+    }
+
+    for ($i = 1; $i -le $TalkTracks.Count; $i++) {
+        Add-Notes $presentation.Slides.Item($i) $TalkTracks[$i - 1]
     }
 
     if (Test-Path $OutputPath) { Remove-Item -Force $OutputPath }
