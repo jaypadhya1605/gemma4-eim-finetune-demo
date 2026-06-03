@@ -370,6 +370,44 @@ function Add-Slide5 {
     return $slide
 }
 
+function Add-Slide5EvalNumbers {
+    param($Presentation, [int]$Index)
+    $slide = New-Slide $Presentation $Index
+    Add-Title $slide "What 37/112 and 71/112 mean"
+    Add-Text $slide "These are not generic model accuracy numbers. They are a workflow scorecard across held-out browser-action prompts." 0.65 1.24 9.2 0.42 13.4 $Theme.Muted -Font "Aptos" | Out-Null
+
+    Add-Box $slide 0.82 1.95 3.1 2.2 $Theme.Panel $Theme.Border -Rounded | Out-Null
+    Add-Text $slide "Base Gemma" 1.12 2.25 2.4 0.25 15 $Theme.BlueDark -Bold -Align "Center" -Font "Segoe UI" | Out-Null
+    Add-Text $slide "37/112" 1.08 2.78 2.5 0.48 31 $Theme.BlueDark -Bold -Align "Center" -Font "Aptos Display" | Out-Null
+    Add-Text $slide "Passed the easier format checks, but missed many workflow-contract checks." 1.15 3.45 2.35 0.4 10.4 $Theme.Muted -Align "Center" -Font "Segoe UI" | Out-Null
+
+    Add-Box $slide 5.02 1.95 3.1 2.2 $Theme.GreenLight "none" -Rounded | Out-Null
+    Add-Text $slide "Fine-tuned Gemma" 5.32 2.25 2.45 0.25 15 $Theme.Green -Bold -Align "Center" -Font "Segoe UI" | Out-Null
+    Add-Text $slide "71/112" 5.28 2.78 2.5 0.48 31 $Theme.Green -Bold -Align "Center" -Font "Aptos Display" | Out-Null
+    Add-Text $slide "Passed 34 more checks after learning the EIM action contract." 5.35 3.45 2.35 0.4 10.4 $Theme.Muted -Align "Center" -Font "Segoe UI" | Out-Null
+
+    Add-Box $slide 9.22 1.95 2.55 2.2 $Theme.BlueLight "none" -Rounded | Out-Null
+    Add-Text $slide "Lift" 9.64 2.25 1.65 0.25 15 $Theme.BlueDark -Bold -Align "Center" -Font "Segoe UI" | Out-Null
+    Add-Text $slide "+34" 9.62 2.82 1.65 0.44 31 $Theme.BlueDark -Bold -Align "Center" -Font "Aptos Display" | Out-Null
+    Add-Text $slide "About +30 percentage points on this narrow scorecard." 9.48 3.48 1.95 0.36 10 $Theme.Muted -Align "Center" -Font "Segoe UI" | Out-Null
+
+    Add-Box $slide 0.92 4.7 3.05 1.15 $Theme.Panel $Theme.Border -Rounded | Out-Null
+    Add-Text $slide "Why 112?" 1.18 4.96 1.3 0.2 13 $Theme.Ink -Bold -Font "Segoe UI" | Out-Null
+    Add-Text $slide "16 held-out prompts x 7 scored checks = 112 possible pass points." 1.18 5.33 2.35 0.28 9.8 $Theme.Muted -Font "Segoe UI" | Out-Null
+
+    Add-Box $slide 4.25 4.7 3.4 1.15 $Theme.Panel $Theme.Border -Rounded | Out-Null
+    Add-Text $slide "What gets scored?" 4.52 4.96 1.9 0.2 13 $Theme.Ink -Bold -Font "Segoe UI" | Out-Null
+    Add-Text $slide "JSON validity, schema, selector policy, missing actions, action order, exact match, and selector validity." 4.52 5.32 2.65 0.34 9.2 $Theme.Muted -Font "Segoe UI" | Out-Null
+
+    Add-Box $slide 8.0 4.7 3.55 1.15 $Theme.OrangeLight "none" -Rounded | Out-Null
+    Add-Text $slide "How to say it" 8.28 4.96 1.7 0.2 13 "8A4B00" -Bold -Font "Segoe UI" | Out-Null
+    Add-Text $slide "This proves directional lift on a synthetic workflow benchmark, not production readiness." 8.28 5.32 2.8 0.32 9.4 "8A4B00" -Font "Segoe UI" | Out-Null
+
+    Add-Footer $slide $Index
+    Add-Notes $slide "Slide 5. I want to explain the numbers at the top of the app. Base Gemma winner eval is 37 out of 112. Fine-tuned winner eval is 71 out of 112. These are not generic model accuracy numbers. They are a workflow scorecard. The app evaluated 16 held-out browser-action prompts. For each prompt, it scored 7 checks, so 16 times 7 equals 112 possible pass points. Base Gemma passed 37 of those checks. Fine-tuned Gemma passed 71. That is a lift of 34 checks, or roughly 30 percentage points. The right way to say this is: fine-tuning materially improved the model's ability to follow the EIM action contract. It learned to return structured JSON, stable selectors, required actions, and better order more often. The important caveat is that this is a synthetic workflow benchmark. It is a strong directional demo result, not a production readiness claim."
+    return $slide
+}
+
 function Add-Slide6 {
     param($Presentation, [int]$Index)
     $slide = New-Slide $Presentation $Index
@@ -630,6 +668,7 @@ $builders = @(
     ${function:Add-Slide2},
     ${function:Add-Slide3},
     ${function:Add-Slide4},
+    ${function:Add-Slide5EvalNumbers},
     ${function:Add-Slide5},
     ${function:Add-Slide6},
     ${function:Add-Slide7},
@@ -673,7 +712,18 @@ $TalkTracks = @(
         "That is why prompting alone is not the full answer for this demo."
     ))
     (New-TalkTrack @(
-        "Slide 5. The small SLM succeeds natively on general understanding.",
+        "Slide 5. I want to explain the numbers at the top of the app.",
+        "Base Gemma winner eval is 37 out of 112.",
+        "Fine-tuned winner eval is 71 out of 112.",
+        "These are not generic model accuracy numbers; they are a workflow scorecard.",
+        "The app evaluated 16 held-out browser-action prompts, and each prompt had 7 scored checks, so 16 times 7 equals 112 possible pass points.",
+        "Base Gemma passed 37 of those checks, while fine-tuned Gemma passed 71.",
+        "That is a lift of 34 checks, or roughly 30 percentage points.",
+        "The right way to phrase this is: fine-tuning materially improved the model's ability to follow the EIM action contract.",
+        "The caveat is that this is a synthetic workflow benchmark, not a production readiness claim."
+    ))
+    (New-TalkTrack @(
+        "Slide 6. The small SLM succeeds natively on general understanding.",
         "It can parse healthcare-ish instructions and compact HTML or DOM snippets.",
         "It usually understands click, type, and extract as action types.",
         "But native behavior is still inconsistent for automation.",
@@ -681,7 +731,7 @@ $TalkTracks = @(
         "So the measured gap is behavior consistency, not raw model knowledge."
     ))
     (New-TalkTrack @(
-        "Slide 6. Fine-tuning is the right lever because the gap is behavioral.",
+        "Slide 7. Fine-tuning is the right lever because the gap is behavioral.",
         "We are not teaching Molina medical policy to the model.",
         "We are teaching the model how to respond when it sees a page state and a user instruction.",
         "LoRA keeps the base Gemma model frozen and trains a small adapter on top.",
@@ -689,7 +739,7 @@ $TalkTracks = @(
         "This keeps the experiment cheaper and makes the behavior swappable by workflow later."
     ))
     (New-TalkTrack @(
-        "Slide 7. Here is the end-to-end process flow.",
+        "Slide 8. Here is the end-to-end process flow.",
         "First, we generate deterministic synthetic JSONL examples.",
         "Second, we prepare or package the data for AzureML.",
         "Third, the AzureML SDK submits a command job to the A100 cluster.",
@@ -698,7 +748,7 @@ $TalkTracks = @(
         "Finally, the Streamlit app compares base and tuned behavior on the same prompts."
     ))
     (New-TalkTrack @(
-        "Slide 8. This is the data used for training.",
+        "Slide 9. This is the data used for training.",
         "The current winner profile uses 96 training records, 24 validation records, and 16 holdout eval prompts.",
         "Each record is a messages object: system instruction, user DOM plus instruction, and assistant JSON answer.",
         "The values are fake: fake member IDs, fake authorization IDs, and fake claims.",
@@ -706,7 +756,7 @@ $TalkTracks = @(
         "We are proving the workflow pattern without exposing Molina production data."
     ))
     (New-TalkTrack @(
-        "Slide 9. These are the technical resources behind the demo.",
+        "Slide 10. These are the technical resources behind the demo.",
         "Foundry and AzureML catalog assets provide the Gemma base model reference.",
         "AzureML provides the workspace, jobs, data assets, model registry, lineage, and managed online endpoint.",
         "A100 compute runs the actual training job.",
@@ -714,7 +764,7 @@ $TalkTracks = @(
         "The SDK scripts are control-plane wrappers: prepare data, submit training, register the adapter, and deploy the endpoint."
     ))
     (New-TalkTrack @(
-        "Slide 10. This is what trains on the A100.",
+        "Slide 11. This is what trains on the A100.",
         "The laptop does not fine-tune the model. It only submits and monitors the AzureML job.",
         "Inside the job, Transformers loads the Gemma base model in bf16.",
         "PEFT applies LoRA with rank 32 and alpha 64 in the current winner profile.",
@@ -723,7 +773,7 @@ $TalkTracks = @(
         "The output is a LoRA adapter plus metadata, not a full model retrain."
     ))
     (New-TalkTrack @(
-        "Slide 11. This is the fine-tuning code path in plain English.",
+        "Slide 12. This is the fine-tuning code path in plain English.",
         "Step one, Transformers loads the base Gemma model from the catalog mount or model path.",
         "Step two, PEFT injects LoRA trainable matrices into selected layers while the base weights stay frozen.",
         "Step three, SFTTrainer trains against the message records: system, user DOM, and assistant JSON.",
@@ -731,7 +781,7 @@ $TalkTracks = @(
         "The key point is that fine-tuning changes the response behavior through the adapter, not by rewriting the whole base model."
     ))
     (New-TalkTrack @(
-        "Slide 12. The live serving pattern uses one endpoint and two behaviors.",
+        "Slide 13. The live serving pattern uses one endpoint and two behaviors.",
         "The endpoint loads the base model and the LoRA adapter.",
         "When use_adapter is false, we see base Gemma behavior.",
         "When use_adapter is true, we see the fine-tuned behavior.",
@@ -739,7 +789,7 @@ $TalkTracks = @(
         "After the demo, delete the endpoint to stop A100 hourly billing."
     ))
     (New-TalkTrack @(
-        "Slide 13. The conclusion is that the fine-tuned model solves the narrow contract better.",
+        "Slide 14. The conclusion is that the fine-tuned model solves the narrow contract better.",
         "It learns to use stable data-eim selectors instead of generated IDs.",
         "It learns workflow order, such as opening the workspace before acting inside it.",
         "It keeps the response machine-readable by returning JSON only.",
