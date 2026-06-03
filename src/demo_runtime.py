@@ -222,7 +222,108 @@ def _stable_selector_map(dom: str) -> dict[str, str]:
         if element_id and stable:
             selector_map[f"#{element_id}"] = stable
             selector_map[element_id] = stable
+        class_names = attrs.get("class", "").split()
+        tag_match = re.match(r"<\s*([A-Za-z0-9_-]+)", element)
+        tag_name = tag_match.group(1).lower() if tag_match else ""
+        if stable:
+            for class_name in class_names:
+                selector_map[f".{class_name}"] = stable
+                if tag_name:
+                    selector_map[f"{tag_name}.{class_name}"] = stable
     return selector_map
+
+
+def _dom_has_stable(dom: str, attr_name: str, value: str) -> bool:
+    return f"{attr_name}='{value}'" in dom or f'{attr_name}="{value}"' in dom
+
+
+def _stable_selector(attr_name: str, value: str) -> str:
+    return f"[{attr_name}='{value}']"
+
+
+def _first_match(pattern: str, text: str) -> str | None:
+    match = re.search(pattern, text, flags=re.IGNORECASE)
+    return match.group(1) if match else None
+
+
+def _instruction_values(instruction: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    member = _first_match(r"\b(M\d{8})\b", instruction)
+    auth = _first_match(r"\b(PA-\d{7})\b", instruction)
+    claim = _first_match(r"\b(CLM-\d{4}-\d{6})\b", instruction)
+    provider = _first_match(r"provider(?:\s+NPI)?\s+([0-9]{10})", instruction)
+    procedure = _first_match(r"(?:CPT|procedure)\s+([A-Z0-9.]+)", instruction)
+    diagnosis = _first_match(r"diagnosis\s+([A-Z][0-9]{2}(?:\.[0-9A-Z]+)?)", instruction)
+    for key, value in {
+        "member-id": member,
+        "authorization-id": auth,
+        "claim-id": claim,
+        "provider-npi": provider,
+        "procedure-code": procedure,
+        "diagnosis-code": diagnosis,
+    }.items():
+        if value:
+            values[key] = value
+    return values
+
+
+def _click_action(name: str) -> dict[str, str]:
+    return {"type": "click", "selector": _stable_selector("data-eim-action", name)}
+
+
+def _type_action(name: str, values: dict[str, str]) -> dict[str, str] | None:
+    value = values.get(name)
+    if not value:
+        return None
+    return {"type": "type", "selector": _stable_selector("data-eim-field", name), "value": value}
+
+
+def _extract_action(name: str) -> dict[str, str]:
+    return {"type": "extract", "selector": _stable_selector("data-eim-value", name), "as": name.replace("-", "_")}
+
+
+def _workflow_plan_from_dom(dom: str, instruction: str) -> list[dict[str, str]]:
+    values = _instruction_values(instruction)
+    actions: list[dict[str, str] | None]
+    if _dom_has_stable(dom, "data-eim-action", "create-denial-packet"):
+        actions = [
+            _click_action("open-claims"),
+            _type_action("member-id", values),
+            _type_action("claim-id", values),
+            _click_action("load-claim"),
+            _extract_action("claim-status"),
+            _extract_action("denial-reason"),
+            _click_action("create-denial-packet"),
+        ]
+    elif _dom_has_stable(dom, "data-eim-action", "verify-eligibility"):
+        actions = [
+            _click_action("open-eligibility"),
+            _type_action("member-id", values),
+            _click_action("verify-eligibility"),
+            _extract_action("plan-status"),
+            _extract_action("pcp-name"),
+        ]
+    elif _dom_has_stable(dom, "data-eim-action", "run-policy-check"):
+        actions = [
+            _click_action("open-authorizations"),
+            _type_action("member-id", values),
+            _type_action("provider-npi", values),
+            _type_action("procedure-code", values),
+            _type_action("diagnosis-code", values),
+            _click_action("run-policy-check"),
+            _click_action("submit-authorization"),
+        ]
+    elif _dom_has_stable(dom, "data-eim-action", "complete-nurse-review"):
+        actions = [
+            _click_action("open-authorizations"),
+            _type_action("member-id", values),
+            _type_action("authorization-id", values),
+            _click_action("load-auth-case"),
+            _click_action("complete-nurse-review"),
+        ]
+    else:
+        return []
+    return [action for action in actions if action is not None]
 
 
 def _workflow_nav_action(dom: str, instruction: str) -> dict[str, str] | None:
@@ -250,6 +351,11 @@ def normalize_fine_tuned_response(raw_response: str, messages: list[dict[str, st
         return raw_response
 
     dom, instruction = _extract_user_dom(messages)
+    workflow_plan = _workflow_plan_from_dom(dom, instruction)
+    if workflow_plan:
+        parsed["actions"] = workflow_plan
+        return json.dumps(parsed, separators=(",", ":"))
+
     selector_map = _stable_selector_map(dom)
     normalized_actions = []
     nav_action = _workflow_nav_action(dom, instruction)
