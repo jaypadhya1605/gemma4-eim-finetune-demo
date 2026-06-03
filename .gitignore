@@ -1,0 +1,15 @@
+.env
+.job_state.json
+results.json
+.venv/
+__pycache__/
+*.pyc
+.env
+.job_state.json
+results.json
+__pycache__/
+*/__pycache__/
+.streamlit/secrets.toml
+data/eval_results/*_logs/
+data/eval_results/**/*token*
+data/eval_results/**/*.log

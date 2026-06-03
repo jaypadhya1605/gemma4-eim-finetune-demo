@@ -1,0 +1,27 @@
+name: gemma4-lora-sft
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      # Core training stack
+      - torch==2.7.1
+      # Gemma 4 catalog checkpoints require architecture support newer than the PyPI release.
+      - git+https://github.com/huggingface/transformers.git
+      - accelerate==1.8.1
+      - trl==0.15.2
+      - peft==0.15.2
+      - datasets==3.0.1
+      - bitsandbytes==0.46.1   # only needed if you switch to QLoRA later
+
+      # AzureML metric streaming
+      - mlflow==2.17.0
+      - azureml-mlflow==1.58.0
+
+      # Misc
+      - sentencepiece==0.2.0
+      - protobuf==5.28.0
+      - tensorboard==2.18.0

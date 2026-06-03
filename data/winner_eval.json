@@ -1,0 +1,822 @@
+[
+  {
+    "name": "auth-nurse-review",
+    "user": "DOM:\n<nav>\n  <button id='nav-3430-mbr' data-eim-action='open-member-center'>Members</button>\n  <button id='nav-3430-auth' data-eim-action='open-authorizations'>Authorizations</button>\n  <button id='nav-3430-claims' data-eim-action='open-claims'>Claims</button>\n</nav>\n<section id='auth-workqueue-3430' data-workflow='auth-nurse-review'>\n  <input id='member-search-3430' aria-label='Subscriber or Member' data-eim-field='member-id' />\n  <input id='auth-id-3430' aria-label='Authorization Number' data-eim-field='authorization-id' />\n  <button id='open-auth-3430' data-eim-action='load-auth-case'>Load Case</button>\n  <button id='submit-review-3430' data-eim-action='complete-nurse-review'>Complete Nurse Review</button>\n</section>\n\nInstruction: Open Molina authorization case PA-2000168 for member M10000065 and complete nurse review",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000065"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='authorization-id']",
+          "value": "PA-2000168"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-auth-case']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='complete-nurse-review']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='authorization-id']",
+      "[data-eim-action='load-auth-case']",
+      "[data-eim-action='complete-nurse-review']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "prior-auth-policy-check",
+    "user": "DOM:\n<div class='workspace'>\n  <a id='link-6816-auth' data-eim-action='open-authorizations'>Auth Center</a>\n  <a id='link-6816-claim' data-eim-action='open-claims'>Claim Center</a>\n</div>\n<form id='pa-create-6816' data-workflow='prior-auth-policy-check'>\n  <input id='mbr-6816' data-eim-field='member-id' />\n  <input id='provider-6816' data-eim-field='provider-npi' />\n  <input id='procedure-6816' data-eim-field='procedure-code' />\n  <input id='dx-6816' data-eim-field='diagnosis-code' />\n  <button id='policy-6816' data-eim-action='run-policy-check'>Run Policy Check</button>\n  <button id='submit-6816' data-eim-action='submit-authorization'>Submit Authorization</button>\n</form>\n\nInstruction: Create a Molina prior authorization for member M10000110, provider 1000000156, CPT 93000, diagnosis K21.9; run policy check before submitting",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000110"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='provider-npi']",
+          "value": "1000000156"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='procedure-code']",
+          "value": "93000"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='diagnosis-code']",
+          "value": "K21.9"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='run-policy-check']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='submit-authorization']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='provider-npi']",
+      "[data-eim-field='procedure-code']",
+      "[data-eim-field='diagnosis-code']",
+      "[data-eim-action='run-policy-check']",
+      "[data-eim-action='submit-authorization']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "claim-denial-packet",
+    "user": "DOM:\n<nav>\n  <button id='claim-nav-2257' data-eim-action='open-claims'>Claims</button>\n  <button id='auth-nav-2257' data-eim-action='open-authorizations'>Authorizations</button>\n</nav>\n<section id='claim-review-2257' data-workflow='denial-packet'>\n  <input id='claim-field-2257' data-eim-field='claim-id' />\n  <input id='member-field-2257' data-eim-field='member-id' />\n  <button id='load-claim-2257' data-eim-action='load-claim'>Load Claim</button>\n  <span class='status-pill' data-eim-value='claim-status'>Denied</span>\n  <span class='reason' data-eim-value='denial-reason'>Missing prior authorization</span>\n  <button id='packet-2257' data-eim-action='create-denial-packet'>Create Denial Packet</button>\n</section>\n\nInstruction: For member M10000137, load denied claim CLM-2026-100240, extract status and denial reason, then create the denial packet",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-claims']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000137"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='claim-id']",
+          "value": "CLM-2026-100240"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-claim']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='claim-status']",
+          "as": "claim_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='denial-reason']",
+          "as": "denial_reason"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='create-denial-packet']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-claims']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='claim-id']",
+      "[data-eim-action='load-claim']",
+      "[data-eim-value='claim-status']",
+      "[data-eim-value='denial-reason']",
+      "[data-eim-action='create-denial-packet']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "extract",
+      "extract",
+      "click"
+    ]
+  },
+  {
+    "name": "eligibility-pcp-review",
+    "user": "DOM:\n<nav>\n  <a id='nav-elg-3456' data-eim-action='open-eligibility'>Eligibility</a>\n  <a id='nav-auth-3456' data-eim-action='open-authorizations'>Authorizations</a>\n</nav>\n<section id='eligibility-3456' data-workflow='eligibility-pcp-review'>\n  <input id='subscriber-3456' data-eim-field='member-id' />\n  <button id='verify-3456' data-eim-action='verify-eligibility'>Verify</button>\n  <span id='plan-3456' data-eim-value='plan-status'>Active</span>\n  <span id='pcp-3456' data-eim-value='pcp-name'>Avery Primary Care</span>\n</section>\n\nInstruction: Verify eligibility for member M10000076, then extract plan status and PCP name",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-eligibility']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000076"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='verify-eligibility']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='plan-status']",
+          "as": "plan_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='pcp-name']",
+          "as": "pcp_name"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-eligibility']",
+      "[data-eim-field='member-id']",
+      "[data-eim-action='verify-eligibility']",
+      "[data-eim-value='plan-status']",
+      "[data-eim-value='pcp-name']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "click",
+      "extract",
+      "extract"
+    ]
+  },
+  {
+    "name": "auth-nurse-review",
+    "user": "DOM:\n<nav>\n  <button id='nav-9497-mbr' data-eim-action='open-member-center'>Members</button>\n  <button id='nav-9497-auth' data-eim-action='open-authorizations'>Authorizations</button>\n  <button id='nav-9497-claims' data-eim-action='open-claims'>Claims</button>\n</nav>\n<section id='auth-workqueue-9497' data-workflow='auth-nurse-review'>\n  <input id='member-search-9497' aria-label='Subscriber or Member' data-eim-field='member-id' />\n  <input id='auth-id-9497' aria-label='Authorization Number' data-eim-field='authorization-id' />\n  <button id='open-auth-9497' data-eim-action='load-auth-case'>Load Case</button>\n  <button id='submit-review-9497' data-eim-action='complete-nurse-review'>Complete Nurse Review</button>\n</section>\n\nInstruction: Open Molina authorization case PA-2000059 for member M10000056 and complete nurse review",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000056"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='authorization-id']",
+          "value": "PA-2000059"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-auth-case']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='complete-nurse-review']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='authorization-id']",
+      "[data-eim-action='load-auth-case']",
+      "[data-eim-action='complete-nurse-review']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "prior-auth-policy-check",
+    "user": "DOM:\n<div class='workspace'>\n  <a id='link-3839-auth' data-eim-action='open-authorizations'>Auth Center</a>\n  <a id='link-3839-claim' data-eim-action='open-claims'>Claim Center</a>\n</div>\n<form id='pa-create-3839' data-workflow='prior-auth-policy-check'>\n  <input id='mbr-3839' data-eim-field='member-id' />\n  <input id='provider-3839' data-eim-field='provider-npi' />\n  <input id='procedure-3839' data-eim-field='procedure-code' />\n  <input id='dx-3839' data-eim-field='diagnosis-code' />\n  <button id='policy-3839' data-eim-action='run-policy-check'>Run Policy Check</button>\n  <button id='submit-3839' data-eim-action='submit-authorization'>Submit Authorization</button>\n</form>\n\nInstruction: Create a Molina prior authorization for member M10000166, provider 1000000071, CPT 70551, diagnosis I10; run policy check before submitting",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000166"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='provider-npi']",
+          "value": "1000000071"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='procedure-code']",
+          "value": "70551"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='diagnosis-code']",
+          "value": "I10"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='run-policy-check']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='submit-authorization']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='provider-npi']",
+      "[data-eim-field='procedure-code']",
+      "[data-eim-field='diagnosis-code']",
+      "[data-eim-action='run-policy-check']",
+      "[data-eim-action='submit-authorization']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "claim-denial-packet",
+    "user": "DOM:\n<nav>\n  <button id='claim-nav-9975' data-eim-action='open-claims'>Claims</button>\n  <button id='auth-nav-9975' data-eim-action='open-authorizations'>Authorizations</button>\n</nav>\n<section id='claim-review-9975' data-workflow='denial-packet'>\n  <input id='claim-field-9975' data-eim-field='claim-id' />\n  <input id='member-field-9975' data-eim-field='member-id' />\n  <button id='load-claim-9975' data-eim-action='load-claim'>Load Claim</button>\n  <span class='status-pill' data-eim-value='claim-status'>Denied</span>\n  <span class='reason' data-eim-value='denial-reason'>Missing prior authorization</span>\n  <button id='packet-9975' data-eim-action='create-denial-packet'>Create Denial Packet</button>\n</section>\n\nInstruction: For member M10000163, load denied claim CLM-2026-100159, extract status and denial reason, then create the denial packet",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-claims']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000163"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='claim-id']",
+          "value": "CLM-2026-100159"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-claim']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='claim-status']",
+          "as": "claim_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='denial-reason']",
+          "as": "denial_reason"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='create-denial-packet']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-claims']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='claim-id']",
+      "[data-eim-action='load-claim']",
+      "[data-eim-value='claim-status']",
+      "[data-eim-value='denial-reason']",
+      "[data-eim-action='create-denial-packet']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "extract",
+      "extract",
+      "click"
+    ]
+  },
+  {
+    "name": "eligibility-pcp-review",
+    "user": "DOM:\n<nav>\n  <a id='nav-elg-6924' data-eim-action='open-eligibility'>Eligibility</a>\n  <a id='nav-auth-6924' data-eim-action='open-authorizations'>Authorizations</a>\n</nav>\n<section id='eligibility-6924' data-workflow='eligibility-pcp-review'>\n  <input id='subscriber-6924' data-eim-field='member-id' />\n  <button id='verify-6924' data-eim-action='verify-eligibility'>Verify</button>\n  <span id='plan-6924' data-eim-value='plan-status'>Active</span>\n  <span id='pcp-6924' data-eim-value='pcp-name'>Avery Primary Care</span>\n</section>\n\nInstruction: Verify eligibility for member M10000053, then extract plan status and PCP name",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-eligibility']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000053"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='verify-eligibility']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='plan-status']",
+          "as": "plan_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='pcp-name']",
+          "as": "pcp_name"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-eligibility']",
+      "[data-eim-field='member-id']",
+      "[data-eim-action='verify-eligibility']",
+      "[data-eim-value='plan-status']",
+      "[data-eim-value='pcp-name']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "click",
+      "extract",
+      "extract"
+    ]
+  },
+  {
+    "name": "auth-nurse-review",
+    "user": "DOM:\n<nav>\n  <button id='nav-1510-mbr' data-eim-action='open-member-center'>Members</button>\n  <button id='nav-1510-auth' data-eim-action='open-authorizations'>Authorizations</button>\n  <button id='nav-1510-claims' data-eim-action='open-claims'>Claims</button>\n</nav>\n<section id='auth-workqueue-1510' data-workflow='auth-nurse-review'>\n  <input id='member-search-1510' aria-label='Subscriber or Member' data-eim-field='member-id' />\n  <input id='auth-id-1510' aria-label='Authorization Number' data-eim-field='authorization-id' />\n  <button id='open-auth-1510' data-eim-action='load-auth-case'>Load Case</button>\n  <button id='submit-review-1510' data-eim-action='complete-nurse-review'>Complete Nurse Review</button>\n</section>\n\nInstruction: Open Molina authorization case PA-2000129 for member M10000179 and complete nurse review",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000179"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='authorization-id']",
+          "value": "PA-2000129"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-auth-case']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='complete-nurse-review']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='authorization-id']",
+      "[data-eim-action='load-auth-case']",
+      "[data-eim-action='complete-nurse-review']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "prior-auth-policy-check",
+    "user": "DOM:\n<div class='workspace'>\n  <a id='link-8296-auth' data-eim-action='open-authorizations'>Auth Center</a>\n  <a id='link-8296-claim' data-eim-action='open-claims'>Claim Center</a>\n</div>\n<form id='pa-create-8296' data-workflow='prior-auth-policy-check'>\n  <input id='mbr-8296' data-eim-field='member-id' />\n  <input id='provider-8296' data-eim-field='provider-npi' />\n  <input id='procedure-8296' data-eim-field='procedure-code' />\n  <input id='dx-8296' data-eim-field='diagnosis-code' />\n  <button id='policy-8296' data-eim-action='run-policy-check'>Run Policy Check</button>\n  <button id='submit-8296' data-eim-action='submit-authorization'>Submit Authorization</button>\n</form>\n\nInstruction: Create a Molina prior authorization for member M10000171, provider 1000000191, CPT 85025, diagnosis E11.9; run policy check before submitting",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000171"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='provider-npi']",
+          "value": "1000000191"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='procedure-code']",
+          "value": "85025"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='diagnosis-code']",
+          "value": "E11.9"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='run-policy-check']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='submit-authorization']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='provider-npi']",
+      "[data-eim-field='procedure-code']",
+      "[data-eim-field='diagnosis-code']",
+      "[data-eim-action='run-policy-check']",
+      "[data-eim-action='submit-authorization']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "claim-denial-packet",
+    "user": "DOM:\n<nav>\n  <button id='claim-nav-8571' data-eim-action='open-claims'>Claims</button>\n  <button id='auth-nav-8571' data-eim-action='open-authorizations'>Authorizations</button>\n</nav>\n<section id='claim-review-8571' data-workflow='denial-packet'>\n  <input id='claim-field-8571' data-eim-field='claim-id' />\n  <input id='member-field-8571' data-eim-field='member-id' />\n  <button id='load-claim-8571' data-eim-action='load-claim'>Load Claim</button>\n  <span class='status-pill' data-eim-value='claim-status'>Denied</span>\n  <span class='reason' data-eim-value='denial-reason'>Missing prior authorization</span>\n  <button id='packet-8571' data-eim-action='create-denial-packet'>Create Denial Packet</button>\n</section>\n\nInstruction: For member M10000131, load denied claim CLM-2026-100191, extract status and denial reason, then create the denial packet",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-claims']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000131"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='claim-id']",
+          "value": "CLM-2026-100191"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-claim']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='claim-status']",
+          "as": "claim_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='denial-reason']",
+          "as": "denial_reason"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='create-denial-packet']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-claims']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='claim-id']",
+      "[data-eim-action='load-claim']",
+      "[data-eim-value='claim-status']",
+      "[data-eim-value='denial-reason']",
+      "[data-eim-action='create-denial-packet']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "extract",
+      "extract",
+      "click"
+    ]
+  },
+  {
+    "name": "eligibility-pcp-review",
+    "user": "DOM:\n<nav>\n  <a id='nav-elg-4660' data-eim-action='open-eligibility'>Eligibility</a>\n  <a id='nav-auth-4660' data-eim-action='open-authorizations'>Authorizations</a>\n</nav>\n<section id='eligibility-4660' data-workflow='eligibility-pcp-review'>\n  <input id='subscriber-4660' data-eim-field='member-id' />\n  <button id='verify-4660' data-eim-action='verify-eligibility'>Verify</button>\n  <span id='plan-4660' data-eim-value='plan-status'>Active</span>\n  <span id='pcp-4660' data-eim-value='pcp-name'>Avery Primary Care</span>\n</section>\n\nInstruction: Verify eligibility for member M10000147, then extract plan status and PCP name",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-eligibility']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000147"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='verify-eligibility']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='plan-status']",
+          "as": "plan_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='pcp-name']",
+          "as": "pcp_name"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-eligibility']",
+      "[data-eim-field='member-id']",
+      "[data-eim-action='verify-eligibility']",
+      "[data-eim-value='plan-status']",
+      "[data-eim-value='pcp-name']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "click",
+      "extract",
+      "extract"
+    ]
+  },
+  {
+    "name": "auth-nurse-review",
+    "user": "DOM:\n<nav>\n  <button id='nav-9670-mbr' data-eim-action='open-member-center'>Members</button>\n  <button id='nav-9670-auth' data-eim-action='open-authorizations'>Authorizations</button>\n  <button id='nav-9670-claims' data-eim-action='open-claims'>Claims</button>\n</nav>\n<section id='auth-workqueue-9670' data-workflow='auth-nurse-review'>\n  <input id='member-search-9670' aria-label='Subscriber or Member' data-eim-field='member-id' />\n  <input id='auth-id-9670' aria-label='Authorization Number' data-eim-field='authorization-id' />\n  <button id='open-auth-9670' data-eim-action='load-auth-case'>Load Case</button>\n  <button id='submit-review-9670' data-eim-action='complete-nurse-review'>Complete Nurse Review</button>\n</section>\n\nInstruction: Open Molina authorization case PA-2000159 for member M10000041 and complete nurse review",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000041"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='authorization-id']",
+          "value": "PA-2000159"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-auth-case']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='complete-nurse-review']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='authorization-id']",
+      "[data-eim-action='load-auth-case']",
+      "[data-eim-action='complete-nurse-review']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "prior-auth-policy-check",
+    "user": "DOM:\n<div class='workspace'>\n  <a id='link-2570-auth' data-eim-action='open-authorizations'>Auth Center</a>\n  <a id='link-2570-claim' data-eim-action='open-claims'>Claim Center</a>\n</div>\n<form id='pa-create-2570' data-workflow='prior-auth-policy-check'>\n  <input id='mbr-2570' data-eim-field='member-id' />\n  <input id='provider-2570' data-eim-field='provider-npi' />\n  <input id='procedure-2570' data-eim-field='procedure-code' />\n  <input id='dx-2570' data-eim-field='diagnosis-code' />\n  <button id='policy-2570' data-eim-action='run-policy-check'>Run Policy Check</button>\n  <button id='submit-2570' data-eim-action='submit-authorization'>Submit Authorization</button>\n</form>\n\nInstruction: Create a Molina prior authorization for member M10000125, provider 1000000204, CPT 93000, diagnosis N39.0; run policy check before submitting",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-authorizations']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000125"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='provider-npi']",
+          "value": "1000000204"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='procedure-code']",
+          "value": "93000"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='diagnosis-code']",
+          "value": "N39.0"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='run-policy-check']"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='submit-authorization']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-authorizations']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='provider-npi']",
+      "[data-eim-field='procedure-code']",
+      "[data-eim-field='diagnosis-code']",
+      "[data-eim-action='run-policy-check']",
+      "[data-eim-action='submit-authorization']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "type",
+      "type",
+      "click",
+      "click"
+    ]
+  },
+  {
+    "name": "claim-denial-packet",
+    "user": "DOM:\n<nav>\n  <button id='claim-nav-1522' data-eim-action='open-claims'>Claims</button>\n  <button id='auth-nav-1522' data-eim-action='open-authorizations'>Authorizations</button>\n</nav>\n<section id='claim-review-1522' data-workflow='denial-packet'>\n  <input id='claim-field-1522' data-eim-field='claim-id' />\n  <input id='member-field-1522' data-eim-field='member-id' />\n  <button id='load-claim-1522' data-eim-action='load-claim'>Load Claim</button>\n  <span class='status-pill' data-eim-value='claim-status'>Denied</span>\n  <span class='reason' data-eim-value='denial-reason'>Missing prior authorization</span>\n  <button id='packet-1522' data-eim-action='create-denial-packet'>Create Denial Packet</button>\n</section>\n\nInstruction: For member M10000147, load denied claim CLM-2026-100284, extract status and denial reason, then create the denial packet",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-claims']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000147"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='claim-id']",
+          "value": "CLM-2026-100284"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='load-claim']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='claim-status']",
+          "as": "claim_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='denial-reason']",
+          "as": "denial_reason"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='create-denial-packet']"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-claims']",
+      "[data-eim-field='member-id']",
+      "[data-eim-field='claim-id']",
+      "[data-eim-action='load-claim']",
+      "[data-eim-value='claim-status']",
+      "[data-eim-value='denial-reason']",
+      "[data-eim-action='create-denial-packet']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "type",
+      "click",
+      "extract",
+      "extract",
+      "click"
+    ]
+  },
+  {
+    "name": "eligibility-pcp-review",
+    "user": "DOM:\n<nav>\n  <a id='nav-elg-3582' data-eim-action='open-eligibility'>Eligibility</a>\n  <a id='nav-auth-3582' data-eim-action='open-authorizations'>Authorizations</a>\n</nav>\n<section id='eligibility-3582' data-workflow='eligibility-pcp-review'>\n  <input id='subscriber-3582' data-eim-field='member-id' />\n  <button id='verify-3582' data-eim-action='verify-eligibility'>Verify</button>\n  <span id='plan-3582' data-eim-value='plan-status'>Active</span>\n  <span id='pcp-3582' data-eim-value='pcp-name'>Avery Primary Care</span>\n</section>\n\nInstruction: Verify eligibility for member M10000114, then extract plan status and PCP name",
+    "gold": {
+      "actions": [
+        {
+          "type": "click",
+          "selector": "[data-eim-action='open-eligibility']"
+        },
+        {
+          "type": "type",
+          "selector": "[data-eim-field='member-id']",
+          "value": "M10000114"
+        },
+        {
+          "type": "click",
+          "selector": "[data-eim-action='verify-eligibility']"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='plan-status']",
+          "as": "plan_status"
+        },
+        {
+          "type": "extract",
+          "selector": "[data-eim-value='pcp-name']",
+          "as": "pcp_name"
+        }
+      ]
+    },
+    "expected_selectors": [
+      "[data-eim-action='open-eligibility']",
+      "[data-eim-field='member-id']",
+      "[data-eim-action='verify-eligibility']",
+      "[data-eim-value='plan-status']",
+      "[data-eim-value='pcp-name']"
+    ],
+    "expected_action_types": [
+      "click",
+      "type",
+      "click",
+      "extract",
+      "extract"
+    ]
+  }
+]
