@@ -1,6 +1,6 @@
 # Molina EIM — Gemma 4B Fine-Tuning Demo (AzureML)
 
-**Owner:** Jay Padhya (MSFT CSE) · **Customer:** Molina Healthcare EIM · **Audience:** Chirag, Dhanshri, EIM team
+
 
 ## What this is
 Fine-tune **`google/gemma-4-E4B-it`** (Gemma 4, Effective 4B parameters, instruction-tuned) using **LoRA** on **AzureML managed compute** (A100 GPUs Chirag already has provisioned). Demonstrate before/after behavior on synthetic computer-use / extraction tasks.
