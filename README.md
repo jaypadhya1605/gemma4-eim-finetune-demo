@@ -1,4 +1,4 @@
-# Molina EIM — Gemma 4B Fine-Tuning Demo (AzureML)
+# Customer EIM — Gemma 4B Fine-Tuning Demo (AzureML)
 
 
 
@@ -82,7 +82,7 @@ gemma4-finetune/
 ```
 
 ## Hard constraints (governance)
-1. **No Molina data.** All training data is deterministically-generated synthetic computer-use scenarios. Zero PHI, zero real member IDs.
+1. **No Customer data.** All training data is deterministically-generated synthetic computer-use scenarios. Zero PHI, zero real member IDs.
 2. **Gemma 4 license:** Apache 2.0, but gated on Hugging Face. Need an HF token with license accepted before the training job can pull weights. See `01_setup_env.md`.
 3. **All work stays in Azure.** Model weights are pulled from HF *into the A100 VM* once, training happens in-tenant, adapter artifacts land in AzureML's storage.
 
